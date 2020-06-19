@@ -1,6 +1,6 @@
 <template>
-  <section ref="box" :class="className" :style="boxStyle">
-    <div ref="content" class="content" :style="contentStyle">
+  <section ref="box" :style="{height:height+'px',zIndex:zIndex}">
+    <div ref="content" :class="className" :style="{top:stickyTop+'px',zIndex:zIndex,position:position,width:width,height:height+'px'}">
       <slot/>
     </div>
   </section>
@@ -10,12 +10,7 @@
 export default {
   name: 'stickyTop',
   props: {
-    className: String,
-    stickTop: {
-      type: Number,
-      default: 0,
-    },
-    stickLeft: {
+    stickyTop: {
       type: Number,
       default: 0,
     },
@@ -23,33 +18,19 @@ export default {
       type: Number,
       default: 1,
     },
+    className: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
       active: false,
       position: '',
-      contentHeight: 0,
-      width: 0,
-      height: 0,
+      width: undefined,
+      height: undefined,
+      isSticky: false,
     };
-  },
-  computed: {
-    boxStyle() {
-      return {
-        height: `${this.contentHeight}px`,
-        zIndex: this.zIndex,
-      };
-    },
-    contentStyle() {
-      return {
-        top: `${this.stickTop}px`,
-        zIndex: this.zIndex,
-        position: this.position,
-        width: typeof this.width === 'number' ? `${this.width}px` : this.width,
-        height: `${this.height}px`,
-        isSticky: false,
-      };
-    },
   },
   mounted() {
     this.height = this.$el.getBoundingClientRect().height;
@@ -71,6 +52,7 @@ export default {
       }
       this.position = 'fixed';
       this.active = true;
+      this.width += 'px';
       this.isSticky = true;
     },
     reset() {
@@ -94,7 +76,7 @@ export default {
     },
     handleResize() {
       if (this.isSticky) {
-        this.width = this.$el.getBoundingClientRect().width;
+        this.width = `${this.$el.getBoundingClientRect().width}px`;
       }
     },
   },

@@ -31,156 +31,22 @@
       <el-button style="margin-left: 10px;" type="success">publish
       </el-button>
     </sticky>
+    <back-top></back-top>
     <div class="components-container">
       <code>Sticky header, {{ $t('components.stickyTips') }}</code>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
+      <div v-for="index of 100" :key="index">placeholder</div>
     </div>
   </div>
 </template>
 <script>
 import sticky from '@/components/sticky';
+import backTop from '@/components/backTop';
 
 export default {
   name: 'stickyTop',
   components: {
     sticky,
+    backTop,
   },
   data() {
     return {
@@ -201,3 +67,11 @@ export default {
   },
 };
 </script>
+<style scoped>
+.sub-navbar >div,button {
+  margin-right: 10px;
+}
+.time-container {
+  display: inline-block;
+}
+</style>
