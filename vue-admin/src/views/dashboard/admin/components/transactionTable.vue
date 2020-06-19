@@ -87,7 +87,7 @@ export default {
   background-color: #fff;
   overflow: hidden;
   position: relative;
-  min-height: 540px;
+  height: 100%;
 }
 .transaction-table .pagination {
   width: 500px;

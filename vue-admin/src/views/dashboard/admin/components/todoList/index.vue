@@ -1,22 +1,24 @@
 <template>
   <section class="todo-app">
     <header class="header">
-      <input class="new-to" autocomplete="off" placeholder="todo list" @keyup.enter="addTodo">
+      <input class="new-todo" autocomplete="off" placeholder="todo list" @keyup.enter="addTodo">
     </header>
     <section v-show="todoList.length" class="main">
       <input id="toggle-all" :checked="allChecked" class="toggle-all" type="checkbox" @change="toggleAll({ done: !allChecked })">
       <label for="toggle-all"/>
       <ul class="todo-list">
-        <todo
-          v-for="(todo, index) in filteredTodos"
-          :key="index"
-          :todo="todo"
-          @toggleTodo="toggleTodo"
-          @editTodo="editTodo"
-          @delteTodo="deleteTodo"/>
+        <el-scrollbar ref="todobar" class="todo-bar">
+          <todo
+            v-for="(todo, index) in filteredTodos"
+            :key="index"
+            :todo="todo"
+            @toggleTodo="toggleTodo"
+            @editTodo="editTodo"
+            @delteTodo="deleteTodo"/>
+        </el-scrollbar>
       </ul>
     </section>
-    <footer v-show="todos.length" class="footer">
+    <footer v-show="todoList.length" class="footer">
       <span class="todo-count">
         <strong>{{ remaining }}</strong>
         {{ remaining | pluralize('item')}} left
@@ -34,9 +36,9 @@
 import todo from './todo';
 
 const filters = {
-  all: todos => todos,
-  active: todos => todos.filter(todo => !todo.done),
-  completed: todos => todos.filter(todo => todo.done),
+  all: todoList => todoList,
+  active: todoList => todoList.filter(todo => !todo.done),
+  completed: todoList => todoList.filter(todo => todo.done),
 };
 const defalutList = [
   { text: 'star this repository', done: false },
@@ -47,6 +49,9 @@ const defalutList = [
   { text: 'element-ui', done: true },
   { text: 'axios', done: true },
   { text: 'webpack', done: true },
+  { text: 'webpack', done: true },
+  { text: 'webpack', done: true },
+  { text: 'webpack', done: true },
 ];
 export default {
   name: 'todoList',
@@ -55,24 +60,30 @@ export default {
   },
   filters: {
     pluralize: (n, w) => (n === 1 ? w : `${w}s`),
-    capitalize: s => s.chartAt(0).toUpperCase() + s.slice(1),
+    capitalize: s => s.charAt(0).toUpperCase() + s.slice(1),
+  },
+  props: {
+    todoData: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
       visibility: 'all',
       filters,
-      todos: defalutList,
+      todoList: defalutList,
     };
   },
   computed: {
     allChecked() {
-      return this.todos.every(todo => todo.done);
+      return this.todoList.every(todo => todo.done);
     },
     filteredTodos() {
-      return filters[this.visibility(this.todos)];
+      return filters[this.visibility](this.todoList);
     },
     remaining() {
-      return this.todos.filter(todo => !todo.done).length;
+      return this.todoList.filter(todo => !todo.done).length;
     },
   },
   methods: {
@@ -82,7 +93,7 @@ export default {
     addTodo(e) {
       const text = e.target.value;
       if (text.trim()) {
-        this.todos.push({
+        this.todoList.push({
           text,
           done: false,
         });
@@ -94,7 +105,7 @@ export default {
       this.updateTodo(val);
     },
     deleteTodo(todo) {
-      this.todos.splice(this.todos.indexOf(todo), 1);
+      this.todoList.splice(this.todoList.indexOf(todo), 1);
     },
     editTodo({ todo, value }) {
       todo.text = value;
@@ -102,10 +113,10 @@ export default {
     },
     // 移除已完成项目
     clearCompleted() {
-      this.todos = this.todos.filters(todo => !todo.done);
+      this.todoList = this.todoList.filters(todo => !todo.done);
     },
     toggleAll({ done }) {
-      this.todos.forEach((todo) => {
+      this.todoList.forEach((todo) => {
         todo.done = done;
       });
     },

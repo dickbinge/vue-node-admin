@@ -22,21 +22,22 @@
         </div>
       </el-col>
     </el-row>
-    <el-row :gutter="8">
-      <el-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 12}" :xl="{span: 12}" style="padding-right: 8px; margin-bottom: 30px;">
+    <el-row :gutter="20" style="height: 540px">
+      <el-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 12}" :xl="{span: 12}" class="box-content">
         <transaction-table :table-data="tableData" :table-column="tableColumn" />
       </el-col>
-      <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 6}" :xl="{span: 6}" style="margin-bottom: 30px;">
+      <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 6}" :xl="{span: 6}" class="box-content">
         <todo-list :todo-data="todoData" />
       </el-col>
-      <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span:6}" :xl="{span:6}" style="margin-bottom: 30px;">
-        <box-card />
+      <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span:6}" :xl="{span:6}" class="box-content">
+        <box-card :header-img="boxHeaderImg" :avatar="avatar" :mallki-text="mallkiText" :progress-list="progressList"/>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import githubCorner from '@/components/githubCorner';
 import panelGroup from './components/panelGroup';
 import lineChart from './components/lineChart';
@@ -72,9 +73,38 @@ export default {
       tableData: [],
       tableColumn: [],
       todoData: [],
+      boxHeaderImg: 'https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png',
+      mallkiText: 'Vue学习',
+      progressList: [
+        {
+          text: 'JavaScript学习',
+          precentage: 80,
+        },
+        {
+          text: 'ElementUI',
+          precentage: 80,
+        },
+        {
+          text: 'vuex学习',
+          precentage: 80,
+        },
+        {
+          text: 'JavaScript学习',
+          precentage: 80,
+        },
+        {
+          text: 'ElementUI',
+          precentage: 80,
+        },
+        {
+          text: 'vuex学习',
+          precentage: 80,
+        },
+      ],
     };
   },
   computed: {
+    ...mapGetters(['avatar']),
     panelList() {
       return this.shoppingList.map(item => ({
         code: item.code,
@@ -131,6 +161,9 @@ export default {
     background: #fff;
     padding: 16px 16px 0;
     margin-bottom: 32px;
+  }
+  .box-content {
+    height: 100%;
   }
 }
 </style>

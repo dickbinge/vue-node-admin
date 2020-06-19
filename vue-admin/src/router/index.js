@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Layout from '@/views/layout/Layout';
+import componentsRouter from './modules/components';
 
 Vue.use(VueRouter);
 
@@ -54,8 +55,37 @@ export const constantRouterMap = [
       },
     ],
   },
+  {
+    path: '/guide',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/guide/index'),
+        name: 'Guide',
+        meta: { title: 'guide', icon: 'guide', noCache: true },
+      },
+    ],
+  },
 ];
 export default new VueRouter({
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap,
 });
+
+export const asyncRouterMap = [
+  {
+    path: '/icon',
+    component: Layout,
+    redirect: 'icon/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/icons/index'),
+        name: 'Icons',
+        meta: { title: 'icons', icon: 'icon', noCache: true },
+      },
+    ],
+  },
+  componentsRouter,
+];

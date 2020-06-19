@@ -1,4 +1,4 @@
-import { constantRouterMap } from '@/router';
+import { asyncRouterMap, constantRouterMap } from '@/router';
 
 const hasPermission = (roles, route) => {
   if (route.meta && route.meta.roles) {
@@ -27,7 +27,7 @@ const permission = {
   mutations: {
     SET_ROUTERS: (state, routers) => {
       state.addRouters = routers;
-      state.routers = constantRouterMap;
+      state.routers = constantRouterMap.concat(routers);
     },
   },
   actions: {
@@ -36,9 +36,9 @@ const permission = {
         const { roles } = data;
         let accessedRouters = [];
         if (roles.includes('admin')) {
-          accessedRouters = constantRouterMap;
+          accessedRouters = asyncRouterMap;
         } else {
-          accessedRouters = filterAsyncRouter(constantRouterMap, roles);
+          accessedRouters = filterAsyncRouter(asyncRouterMap, roles);
         }
         commit('SET_ROUTERS', accessedRouters);
         resolve();
