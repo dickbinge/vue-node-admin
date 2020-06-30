@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Layout from '@/views/layout/Layout';
 import componentsRouter from './modules/components';
+import chartRouter from './modules/chart';
 
 Vue.use(VueRouter);
 
@@ -88,4 +89,5 @@ export const asyncRouterMap = [
     ],
   },
   componentsRouter,
+  chartRouter,
 ];

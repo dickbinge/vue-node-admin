@@ -27,7 +27,7 @@
         <transaction-table :table-data="tableData" :table-column="tableColumn" />
       </el-col>
       <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 6}" :xl="{span: 6}" class="box-content">
-        <todo-list :todo-data="todoData" />
+        <todo-list />
       </el-col>
       <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span:6}" :xl="{span:6}" class="box-content">
         <box-card :header-img="boxHeaderImg" :avatar="avatar" :mallki-text="mallkiText" :progress-list="progressList"/>
@@ -45,7 +45,7 @@ import raddarChart from './components/raddarChart';
 import pieChart from './components/pieChart';
 import barChart from './components/barChart';
 import transactionTable from './components/transactionTable';
-import todoList from './components/todoList';
+import todoList from './components/todoList/todoList';
 import boxCard from './components/boxCard';
 
 export default {
@@ -72,7 +72,6 @@ export default {
       barData: [],
       tableData: [],
       tableColumn: [],
-      todoData: [],
       boxHeaderImg: 'https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png',
       mallkiText: 'Vue学习',
       progressList: [

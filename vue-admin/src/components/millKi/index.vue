@@ -1,8 +1,8 @@
 <template>
   <a :class="className" class="link-mallki" :href="href">
     {{ text }}
-    <span :data-letters="text" />
-    <span :data-letters="text" />
+    <span :data-letters="text"/>
+    <span :data-letters="text"/>
   </a>
 </template>
 
@@ -20,7 +20,7 @@ export default {
     },
     text: {
       type: String,
-      default: 'vue学习',
+      default: 'vue学习vuex学习',
     },
   },
 };

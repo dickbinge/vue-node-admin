@@ -14,7 +14,7 @@
     </el-table>
     <el-pagination
       background
-      v-if="device !== 'mobile'"
+      v-if="device !== 'mobile' && showPagination"
       class="pagination"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
@@ -35,6 +35,12 @@ export default {
   filters: {
     orderNoFilter(str) {
       return str.substring(0, 30);
+    },
+  },
+  props: {
+    showPagination: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {

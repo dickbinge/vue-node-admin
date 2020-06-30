@@ -14,7 +14,7 @@
             :todo="todo"
             @toggleTodo="toggleTodo"
             @editTodo="editTodo"
-            @delteTodo="deleteTodo"/>
+            @deleteTodo="deleteTodo"/>
         </el-scrollbar>
       </ul>
     </section>
@@ -40,19 +40,6 @@ const filters = {
   active: todoList => todoList.filter(todo => !todo.done),
   completed: todoList => todoList.filter(todo => todo.done),
 };
-const defalutList = [
-  { text: 'star this repository', done: false },
-  { text: 'fork this repository', done: false },
-  { text: 'follow author', done: false },
-  { text: 'vue-element-admin', done: true },
-  { text: 'vue', done: true },
-  { text: 'element-ui', done: true },
-  { text: 'axios', done: true },
-  { text: 'webpack', done: true },
-  { text: 'webpack', done: true },
-  { text: 'webpack', done: true },
-  { text: 'webpack', done: true },
-];
 export default {
   name: 'todoList',
   components: {
@@ -62,17 +49,11 @@ export default {
     pluralize: (n, w) => (n === 1 ? w : `${w}s`),
     capitalize: s => s.charAt(0).toUpperCase() + s.slice(1),
   },
-  props: {
-    todoData: {
-      type: Array,
-      default: () => [],
-    },
-  },
   data() {
     return {
+      todoList: [],
       visibility: 'all',
       filters,
-      todoList: defalutList,
     };
   },
   computed: {
@@ -86,16 +67,54 @@ export default {
       return this.todoList.filter(todo => !todo.done).length;
     },
   },
+  created() {
+    this.getTodoData();
+  },
   methods: {
+    getTodoData() {
+      this.$http.post('/work/todoList').then(({ data }) => {
+        this.todoList = data.data;
+      }).catch();
+    },
+    deleteTodo(todo) {
+      const params = {
+        id: todo._id,
+      };
+      this.$confirm('请确认是否删除当前任务！', '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        this.$http.delete(`/work/todo?id=${params.id}`).then(({ data }) => {
+          if (data.code === 0) {
+            this.getTodoData();
+            this.$message.success('删除成功！');
+          }
+        });
+      });
+    },
     updateTodo(todo) {
       console.log(todo);
+      const id = todo._id;
+      this.$http.put(`/work/todo?id=${id}`, {
+        text: todo.text,
+      }).then(({ data }) => {
+        if (data.code === 0) {
+          this.$message.success('修改成功！');
+        }
+      }).catch();
     },
     addTodo(e) {
       const text = e.target.value;
       if (text.trim()) {
-        this.todoList.push({
+        this.$http.post('/work/todo', {
           text,
           done: false,
+        }).then(({ data }) => {
+          if (data.code === 0) {
+            this.$message.success('保存成功');
+            this.getTodoData();
+          }
         });
       }
       e.target.value = '';
@@ -103,9 +122,6 @@ export default {
     toggleTodo(val) {
       val.done = !val.done;
       this.updateTodo(val);
-    },
-    deleteTodo(todo) {
-      this.todoList.splice(this.todoList.indexOf(todo), 1);
     },
     editTodo({ todo, value }) {
       todo.text = value;

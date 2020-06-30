@@ -1,0 +1,31 @@
+@import './variables.scss';
+
+@mixin colorBtn($color) {
+  background-color: $color;
+  &:hover {
+    color: $color !important;
+    &:before,
+    &:after {
+      background-color: $color;
+    }
+  }
+}
+
+.blue-btn {
+  @include colorBtn($blue);
+}
+.light-blue-btn {
+  @include colorBtn($light-blue);
+}
+.red-btn {
+  @include colorBtn($red);
+}
+.green-btn {
+  @include colorBtn($green);
+}
+.pink-btn {
+  @include colorBtn($pink);
+}
+.yellow-btn {
+  @include colorBtn($yellow);
+}

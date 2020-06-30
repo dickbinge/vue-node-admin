@@ -16,6 +16,7 @@ import './icons';
 import './permission';
 import './errorLog';
 import * as filters from './filter';
+import directives from './directive';
 
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium',
@@ -24,6 +25,7 @@ Vue.use(Element, {
 Object.keys(filters).forEach((key) => {
   Vue.filter(key, filters[key]);
 });
+Vue.use(directives);
 Vue.config.productionTip = false;
 
 new Vue({

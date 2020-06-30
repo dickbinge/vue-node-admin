@@ -43,6 +43,7 @@ export default {
     height: inherit;
     border-radius: 50%;
     overflow: hidden;
+    box-shadow: inset 0 0 0 5px rgba(0, 0, 0, 0.05);
   }
   .pan-info-roles-container {
     padding: 20px;
@@ -51,6 +52,7 @@ export default {
   .pan-img {
     width: 100%;
     height: 100%;
+    position: absolute;
     background-size: 100%;
     border-radius: 50%;
     overflow: hidden;

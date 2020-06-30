@@ -28,6 +28,30 @@ const componentsRouter = {
       name: 'stickyTop',
       meta: { title: 'stickyTop' },
     },
+    {
+      path: 'countTo',
+      component: () => import('@/views/components-demo/countTo'),
+      name: 'countTo',
+      meta: { title: 'countTo' },
+    },
+    {
+      path: 'mixinPage',
+      component: () => import('@/views/components-demo/mixinPage'),
+      name: 'mixinPage',
+      meta: { title: 'mixinPage' },
+    },
+    {
+      path: 'dragDialog',
+      component: () => import('@/views/components-demo/dragDialog'),
+      name: 'dragDialog',
+      meta: { title: 'dragDialog' },
+    },
+    {
+      path: 'dndListPage',
+      component: () => import('@/views/components-demo/dndListPage'),
+      name: 'dndListDemo',
+      meta: { title: 'dndListDemo' },
+    },
   ],
 };
 

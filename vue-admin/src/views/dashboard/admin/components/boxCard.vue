@@ -81,7 +81,10 @@ export default {
       border: 5px solid #fff;
       background-color: #fff;
       margin: auto;
-      box-shadow: none;
+      box-shadow: none !important;
+      ::v-deep .pan-info {
+        box-shadow: none!important;
+      }
     }
     .millki-text {
       position: absolute;

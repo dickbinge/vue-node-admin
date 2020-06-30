@@ -1,3 +1,4 @@
+
 .todo-app {
   font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
   line-height: 1.4em;
@@ -184,6 +185,13 @@
         &:last-child {
           margin-bottom: -1px;
         }
+      }
+      .edit-input {
+        font-size: 14px;
+        border: 1px solid rgba($color: #409eff, $alpha: 0.6);
+        margin: 15px;
+        padding: 6px;
+        width: 80%;
       }
     }
   }

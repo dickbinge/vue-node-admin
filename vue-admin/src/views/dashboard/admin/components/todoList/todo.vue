@@ -14,7 +14,6 @@
       v-show="editing"
       :value="todo.text"
       class="edit-input"
-      @keyup.enter="doneEdit"
       @keyup.esc="cancelEdit"
       @blur="doneEdit">
   </li>
