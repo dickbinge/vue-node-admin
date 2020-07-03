@@ -1,13 +1,4 @@
 
-const CompressionWebpackPlugin = require('compression-webpack-plugin');
-
-const externals = {
-  'element-ui': 'ELEMENT',
-  vue: 'Vue',
-  'vue-router': 'VueRouter',
-  vuex: 'Vuex',
-};
-
 module.exports = {
   devServer: {
     port: 8098,

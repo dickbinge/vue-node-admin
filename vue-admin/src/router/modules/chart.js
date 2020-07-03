@@ -1,20 +1,20 @@
 import Layout from '@/views/layout/Layout';
 
 const chartRouter = {
-  path: 'chart',
+  path: '/charts',
   component: Layout,
   redirect: 'noredirect',
   name: 'chartDemo',
   meta: {
-    title: 'components',
+    title: 'charts',
     icon: 'chart',
   },
   children: [
     {
       path: 'keyBoard',
       component: () => import('@/views/chart-demo/keyBoardPage'),
-      name: 'keyBoard',
-      meta: { title: 'keyBoard' },
+      name: 'KeyboardChart',
+      meta: { title: 'keyboardChart', noCache: true },
     },
   ],
 };
