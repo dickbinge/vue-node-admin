@@ -4,7 +4,6 @@
     <breadcrumb class="breadcrumb-container" />
     <div class="right-menu">
       <template v-if="device!=='mobile'">
-        <error-log class="errLog-container right-menu-item" />
         <el-tooltip :content="$t('navbar.screenfull')" effect="dark" placement="bottom">
           <screenfull class="screenfull right-menu-item" />
         </el-tooltip>
@@ -45,7 +44,6 @@ import { mapGetters } from 'vuex';
 import avatarDefault from '@/assets/images/avatar.gif';
 import Hamburger from '@/components/hamburger';
 import Breadcrumb from '@/components/breadcrumb';
-import ErrorLog from '@/components/errorLog';
 import Screenfull from '@/components/screenfull';
 import SizeSelect from '@/components/sizeSelect';
 import LangSelect from '@/components/langSelect';
@@ -56,7 +54,6 @@ export default {
   components: {
     Hamburger,
     Breadcrumb,
-    ErrorLog,
     Screenfull,
     SizeSelect,
     LangSelect,
@@ -79,7 +76,7 @@ export default {
       this.$store.dispatch('toggleSideBar');
     },
     logout() {
-      this.$store.dispatch('LogOut').then(() => {
+      this.$store.dispatch('logOut').then(() => {
         window.location.reload();
       });
     },

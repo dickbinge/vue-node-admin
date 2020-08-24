@@ -75,7 +75,7 @@ export const constantRouterMap = [
     name: 'ErrorPages',
     meta: {
       title: 'errorPages',
-      icon: 404,
+      icon: '404',
     },
     children: [
       {
@@ -89,6 +89,30 @@ export const constantRouterMap = [
         component: () => import('@/views/errorPage/404'),
         name: 'page404',
         meta: { title: 'page404', noCache: true },
+      },
+    ],
+  },
+  {
+    path: '/video',
+    component: Layout,
+    redirect: 'noredirect',
+    name: 'videoPages',
+    meta: {
+      title: 'videoPages',
+      icon: '404',
+    },
+    children: [
+      {
+        path: 'videoBaberrage',
+        component: () => import('@/views/video-demo/videoBaberrage'),
+        name: 'videoBaberrage',
+        meta: { title: 'videoBaberrage', noCache: true },
+      },
+      {
+        path: 'cutPicture',
+        component: () => import('@/views/video-demo/cutPicture'),
+        name: 'cutPicture',
+        meta: { title: 'cutPicture', noCache: true },
       },
     ],
   },

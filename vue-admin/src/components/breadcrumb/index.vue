@@ -59,19 +59,19 @@ export default {
       }
       this.levelList = matched;
     },
-  },
-  pathCompile(path) {
-    const { params } = this.$route;
-    const toPath = pathToRegexp.compile(path);
-    return toPath(params);
-  },
-  handleLink(item) {
-    const { redirect, path } = item;
-    if (redirect) {
-      this.$router.push(redirect);
-      return;
-    }
-    this.$route.push(this.pathCompile(path));
+    pathCompile(path) {
+      const { params } = this.$route;
+      const toPath = pathToRegexp.compile(path);
+      return toPath(params);
+    },
+    handleLink(item) {
+      const { redirect, path } = item;
+      if (redirect) {
+        this.$router.push(redirect);
+        return;
+      }
+      this.$router.push(this.pathCompile(path));
+    },
   },
 };
 </script>

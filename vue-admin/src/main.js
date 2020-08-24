@@ -4,6 +4,8 @@ import 'normalize.css/normalize.css';
 import Cookies from 'js-cookie';
 import Element from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import videoPlayer from 'vue-video-player';
+
 import '@/styles/index.scss'; // global css
 
 import App from './App';
@@ -17,6 +19,8 @@ import './permission';
 import './errorLog';
 import * as filters from './filter';
 import directives from './directive';
+
+Vue.use(videoPlayer);
 
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium',

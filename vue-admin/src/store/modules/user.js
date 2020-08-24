@@ -12,6 +12,7 @@ const user = {
   mutations: {
     SET_TOKEN: (state, token) => {
       state.token = token;
+      setToken(token);
     },
     SET_NAME: (state, name) => {
       state.name = name;
@@ -24,7 +25,7 @@ const user = {
     },
   },
   actions: {
-    loginByUsername({ commit }, userInfo) {
+    loginByUsername({ dispatch }, userInfo) {
       const username = userInfo.username.trim();
       const params = {
         username,
@@ -33,10 +34,7 @@ const user = {
       return new Promise((resolve, reject) => {
         Vue.prototype.$http.post('auth/login', params).then((response) => {
           const { data } = response.data;
-          const token = data._id;
-          commit('SET_TOKEN', token);
-          commit('SET_ROLES', data.roles);
-          setToken(token);
+          dispatch('setUserInfo', data);
           resolve(data);
         }).catch((error) => {
           reject(error);
@@ -84,8 +82,8 @@ const user = {
     },
     setUserInfo({ commit, dispatch }, data) {
       const { roles, name, avatar } = data;
-      commit('SET_TOKEN', roles);
-      setToken(roles);
+      const token = data._id;
+      commit('SET_TOKEN', token);
       commit('SET_ROLES', roles);
       commit('SET_NAME', name);
       commit('SET_AVATAR', avatar);
