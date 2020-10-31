@@ -4,7 +4,7 @@
  * @Autor: jingbin
  * @Date: 2020-08-12 20:15:18
  * @LastEditors: jingbin
- * @LastEditTime: 2020-08-22 18:09:24
+ * @LastEditTime: 2020-08-31 11:01:41
 -->
 <template>
   <div class="cut-picture">
@@ -13,7 +13,7 @@
     </p>
     <div class="source-content">
       <div class="cut-video-content">
-        <video-player ref="video" :src="videoSrc" @play="handlerPlay" @pause="handlerPause" @ended="handlerEnded"></video-player>
+        <video-player ref="video" :src="videoSrc"></video-player>
         <div class="button-content">
           <el-button type="primary" size="small" @click="handlerCutPicture">截取当前画面</el-button>
           <el-button size="small" @click="handlerVideo">视频录影</el-button>
@@ -23,9 +23,24 @@
         <el-scrollbar style="height:100%;" class="el-menuscrollbar">
           <div v-for="(img, index) of imageList" :key="index" class="image-detail" :style="imgContentStyle">
             <i class="el-icon-close icon-delete" @click="deleteImage(index)"></i>
-            <img :src="img.src" @click="openOuter(item)" class="source-img" :width="img.width" :height="img.height"/>
+            <img title="点击查看原图" :ref="`img.${index}`" :src="img.src" @click="openOuter(img)" class="source-img" :width="img.width" :height="img.height"/>
           </div>
         </el-scrollbar>
+      </div>
+    </div>
+    <div class="source-dialog" v-if="showImgDialog">
+      <div class="source-dialog__body">
+        <i class="el-icon-close icon-delete" @click="showImgDialog=false"></i>
+        <img :src="curSourceImg" :width="canvasWidth" :height="canvasHeight" alt="查看原图"/>
+      </div>
+    </div>
+    <div class="source-dialog" v-show="showRecord">
+      <div class="source-dialog__body">
+        <canvas
+          id="vcanvas"
+          ref="recordCanvas"
+          :width="canvasWidth"
+          :height="canvasHeight"/>
       </div>
     </div>
     <el-dialog
@@ -66,14 +81,16 @@
         </div>
       </div>
       <div slot="footer">
-          <el-button @click="cancelEdit" size="small">取 消</el-button>
-          <el-button @click="confirmEdit" size="small" type="primary">确 认</el-button>
+        <el-button @click="cancelEdit" size="small">取 消</el-button>
+        <el-button @click="confirmEdit" size="small" type="primary">确 认</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import RecordRTC from 'recordrtc';
+import html2canvas from 'html2canvas';
 import videoSrc from '@/assets/video/oceans.mp4';
 import videoPlayer from '@/components/videoPlayer';
 import penBtnSrc from '@/assets/images/pen_btn.png';
@@ -108,14 +125,14 @@ export default {
         },
       ],
       checkedPen: 'white',
-      canvasWidth: 800,
+      canvasWidth: 800, // canvas 初始化大小
       canvasHeight: 400,
       showCancelContent: false,
       dialogWidth: '1000px',
-      playerRef: null,
+      playerRef: null, // 播放器对象
       imageCanvas: new Image(), // 缓存当前初始截图
       isMouseDown: false, // 判断鼠标是否按下
-      coordinate: {
+      coordinate: { // 鼠标移动点坐标
         X: 0,
         Y: 0,
         X1: 0,
@@ -124,6 +141,11 @@ export default {
       flag: 0,
       imageList: [],
       imgContentStyle: {},
+      recorder: null,
+      showImgDialog: false,
+      showRecord: false,
+      startTime: 0, // 开始录制的时间点
+      videoTimer: 0,
     };
   },
   created() {
@@ -154,12 +176,6 @@ export default {
         imgObj.src = tempImage;
         this.tempImageCanvasList.push(imgObj);
       }
-    },
-    handlerPlay() {
-    },
-    handlerPause() {
-    },
-    handlerEnded() {
     },
     handlerCutPicture() {
       this.showCutDialog = true;
@@ -193,6 +209,7 @@ export default {
       this.tempImageCanvasList.pop();
       const canvasEl = this.$refs.icanvas;
       const ctx = canvasEl.getContext('2d');
+      // 撤销操作为清空当前canvas，并把存储的image重新绘制到canvas上。
       ctx.clearRect(0, 0, this.canvasWidth, this.canvasWidth);
       if (this.tempImageCanvasList.length === 0) {
         ctx.drawImage(this.imageCanvas, 0, 0, this.canvasWidth, this.canvasHeight);
@@ -203,10 +220,16 @@ export default {
     deleteImage(index) {
       this.imageList.splice(index, 1);
     },
+    // 查看原图
+    openOuter(source) {
+      this.curSourceImg = source.src;
+      this.showImgDialog = true;
+    },
     confirmEdit() {
       const canvasEl = this.$refs.icanvas;
       const obj = {};
       obj.src = canvasEl.toDataURL('image/jpeg');
+      obj.sourceType = 'image';
       obj.width = `${this.canvasWidth / 4}px`;
       obj.height = `${this.canvasHeight / 4}px`;
       this.imgContentStyle = {
@@ -268,7 +291,49 @@ export default {
       this.coordinate.Y = Y1;
     },
     handlerVideo() {
-
+      this.showRecord = true;
+      this.startTime = new Date().getTime();
+      this.$nextTick(() => {
+        this.drawRecord();
+        this.looper();
+      });
+    },
+    drawRecord() {
+      const recordCanvasEl = document.getElementById('vcanvas');
+      this.recorder = RecordRTC(recordCanvasEl, {
+        type: 'cancas',
+      });
+      this.recorder.startRecording();
+    },
+    getVideoFile() {
+      this.recorder.stopRecording(() => {
+        const blob = this.recorder.getBlob();
+        const url = URL.createObjectURL(blob);
+        const obj = {
+          sourceType: 'video',
+          src: url,
+          file: blob,
+        };
+        console.log(obj);
+        this.imageList.push(obj);
+      });
+    },
+    looper() {
+      const nowTime = new Date().getTime();
+      if ((nowTime - this.startTime) / 1000 < 11) {
+        this.videoTimer = window.setTimeout(this.looper, 0);
+      } else {
+        clearTimeout(this.videoTimer);
+        this.showRecord = false;
+        this.getVideoFile();
+      }
+      const videoEl = this.playerRef.$refs.video;
+      const recordCanvasEl = this.$refs.recordCanvas;
+      html2canvas(videoEl).then(() => {
+        const ctx = recordCanvasEl.getContext('2d');
+        ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+        ctx.drawImage(videoEl, 0, 0, this.canvasWidth, this.canvasHeight);
+      });
     },
     handlerUpLoad() {
 
@@ -282,6 +347,16 @@ export default {
 }
 .fade-enter, .fade-leave-to{
   opacity: 0;
+}
+@keyframes showImage {
+  from {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  to{
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 .cut-picture {
   padding: 15px;
@@ -317,6 +392,9 @@ export default {
         cursor: pointer;
         background-color: rgba($color: #182752, $alpha: 0.8);
         border-radius: 50%;
+      }
+      .source-img {
+        cursor: pointer;
       }
     }
   }
@@ -377,6 +455,33 @@ export default {
           }
         }
       }
+    }
+  }
+  .source-dialog {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba($color: #000000, $alpha: 0.5);
+    z-index: 2005;
+    &__body {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      .icon-delete {
+        position: absolute;
+        right: -6px;
+        top: -6px;
+        z-index: 2006;
+        cursor: pointer;
+        color: #fff;
+        background-color: rgba($color: #182752, $alpha: 0.8);
+        border-radius: 50%;
+      }
+      animation: showImage 1s 1;
+      animation-timing-function:cubic-bezier(0.25,0.1,0.25,1);
     }
   }
 }
